@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  monitor_web:
+    build: .
+    restart: always
+    volumes:
+      - ./data:/app/data
+    env_file:
+      - .env
