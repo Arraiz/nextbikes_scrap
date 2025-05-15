@@ -80,10 +80,23 @@ def minify_xml(xml_string, keep_declaration=True):
 def download_and_compare(url, destination_directory, file_name="web_file"):
     previous_content = None
     previous_hash = None
-    destination_path = Path(destination_directory)
+    base_destination_path = Path(destination_directory)
+    base_destination_path.mkdir(parents=True, exist_ok=True)
+    
+    # Create daily folder with format nextbikes-dd-mm-yyyy
+    today = datetime.now()
+    daily_folder_name = f"nextbikes-{today.strftime('%d-%m-%Y')}"
+    destination_path = base_destination_path / daily_folder_name
     destination_path.mkdir(parents=True, exist_ok=True)
 
-    existing_files = sorted(destination_path.glob(f'{file_name}_*.xml'), key=os.path.getmtime, reverse=True)
+    # Find most recent file across all daily folders for comparison
+    all_xml_files = []
+    for folder in base_destination_path.glob("nextbikes-*"):
+        if folder.is_dir():
+            all_xml_files.extend(folder.glob(f'{file_name}_*.xml'))
+    
+    existing_files = sorted(all_xml_files, key=os.path.getmtime, reverse=True)
+    
     if existing_files:
         try:
             with open(existing_files[0], 'r', encoding='utf-8') as f:
@@ -169,7 +182,8 @@ if __name__ == "__main__":
     if target_url == "YOUR_URL_HERE":
         print("Please replace 'YOUR_URL_HERE' with the URL you want to monitor.")
     else:
-        logging.info(f"Starting monitoring of '{target_url}' every {interval_seconds} seconds. Files will be saved as '{file_name}_timestamp.xml' in directory '{relative_destination_directory}'.")
+        logging.info(f"Starting monitoring of '{target_url}' every {interval_seconds} seconds.")
+        logging.info(f"Files will be saved in daily folders (nextbikes-dd-mm-yyyy) within '{relative_destination_directory}' directory.")
         try:
             while True:
                 download_and_compare(target_url, relative_destination_directory, file_name)
