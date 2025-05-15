@@ -2,8 +2,9 @@
 
 # Script to install a cronjob for compressing the previous day's data folder
 
-# Get the absolute path of the compress script
+# Get the absolute path of the scripts directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 COMPRESS_SCRIPT="${SCRIPT_DIR}/compress_previous_day.sh"
 
 # Make the compression script executable
@@ -30,7 +31,7 @@ fi
 
 # Add the new cronjob to run at 1:00 AM every day
 echo "# NextBikes data compression job - Added on $(date +'%Y-%m-%d')" >> "$TEMP_CRON"
-echo "0 1 * * * $COMPRESS_SCRIPT >> ${SCRIPT_DIR}/data/cron_execution.log 2>&1" >> "$TEMP_CRON"
+echo "0 1 * * * $COMPRESS_SCRIPT >> ${PROJECT_ROOT}/data/cron_execution.log 2>&1" >> "$TEMP_CRON"
 
 # Install the new crontab
 crontab "$TEMP_CRON"
@@ -43,8 +44,8 @@ rm "$TEMP_CRON"
 if [ $CRON_STATUS -eq 0 ]; then
     echo "Successfully installed cronjob to compress previous day's data at 1:00 AM daily."
     echo "The compression script is located at: $COMPRESS_SCRIPT"
-    echo "Logs will be written to ${SCRIPT_DIR}/data/compression_log.txt"
-    echo "Cron execution logs will be written to ${SCRIPT_DIR}/data/cron_execution.log"
+    echo "Logs will be written to ${PROJECT_ROOT}/data/compression_log.txt"
+    echo "Cron execution logs will be written to ${PROJECT_ROOT}/data/cron_execution.log"
     
     # Show the current crontab for verification
     echo -e "\nCurrent crontab:"

@@ -3,7 +3,9 @@
 # Script to compress the previous day's nextbikes data folder
 
 # Configuration
-DATA_DIR="$(pwd)/data"
+# Get the path to the project root directory (one level up from scripts)
+PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+DATA_DIR="${PROJECT_ROOT}/data"
 DATE_FORMAT="%d-%m-%Y"
 FOLDER_PREFIX="nextbikes-"
 
