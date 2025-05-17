@@ -31,8 +31,8 @@ fi
 
 # 5. Iniciar aplicación
 echo "Iniciando aplicación..."
-docker-compose down 2>/dev/null
-docker-compose up -d
+docker compose down 2>/dev/null
+docker compose up -d
 
 echo "Configuración completada. Contenedores:"
-docker-compose ps 
+docker compose ps 
