@@ -82,7 +82,7 @@ def download_and_compare(url, destination_directory, file_name="web_file"):
     previous_hash = None
     base_destination_path = Path(destination_directory)
     base_destination_path.mkdir(parents=True, exist_ok=True)
-    
+
     # Create daily folder with format nextbikes-dd-mm-yyyy
     today = datetime.now()
     daily_folder_name = f"nextbikes-{today.strftime('%d-%m-%Y')}"
