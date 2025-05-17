@@ -41,9 +41,14 @@ else
         show_usage
     fi
     
-    # Check if the date is valid
-    if ! date -d "$(echo "$1" | sed 's/-/\//g')" >/dev/null 2>&1; then
-        echo "ERROR: Invalid date. Please provide a valid date in DD-MM-YYYY format."
+    # More flexible date validation for any valid date
+    DAY=$(echo "$1" | cut -d'-' -f1)
+    MONTH=$(echo "$1" | cut -d'-' -f2)
+    YEAR=$(echo "$1" | cut -d'-' -f3)
+
+    # Try to handle the date with simple range validation
+    if [ "$MONTH" -lt 1 ] || [ "$MONTH" -gt 12 ] || [ "$DAY" -lt 1 ] || [ "$DAY" -gt 31 ]; then
+        echo "ERROR: Invalid date components. Please provide a valid date in DD-MM-YYYY format."
         exit 1
     fi
     
