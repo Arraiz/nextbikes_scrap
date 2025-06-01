@@ -4,6 +4,7 @@ services:
   monitor_web:
     build: .
     restart: always
+    user: "1000:1000"  # Map to the appuser we created
     volumes:
       - ./data:/app/data
     env_file:
